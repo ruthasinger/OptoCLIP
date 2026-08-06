@@ -236,7 +236,7 @@ This study implements a multi-modal analysis pipeline integrating FMRP CLIP and 
 
 - **Source Data for Figures 5b-h**
 
-- **Source Data for Figures 5i,j **
+- **Source Data for Figures 5i,j**
 
 - **Source Data for Figure 5k**
 
