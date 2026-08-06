@@ -1,0 +1,4 @@
+"Comparison","Group_1","Group_2","Test","Raw_p_value","Bonferroni_adjusted_p_value"
+"Control + Light vs ChR2 No Light","Control + Light","ChR2 No Light","Two-sided unpaired t-test",0.0255072230933019,0.0765216692799058
+"Control + Light vs ChR2 + Light","Control + Light","ChR2 + Light","Two-sided unpaired t-test",0.00241293683789531,0.00723881051368593
+"ChR2 No Light vs ChR2 + Light","ChR2 No Light","ChR2 + Light","Two-sided unpaired t-test",0.000124256804893276,0.000372770414679827

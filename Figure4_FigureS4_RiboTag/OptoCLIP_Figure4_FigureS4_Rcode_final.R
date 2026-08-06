@@ -7,6 +7,7 @@ library(clusterProfiler)
 library(org.Mm.eg.db)
 library(corrplot)
 library(VennDetail)
+library(pheatmap)
 
 ##############################################################################################################
 #setup the directories
@@ -324,6 +325,419 @@ PCA_batch_corrected <- ggplot(pca_df_plot, aes(PC1, PC2, color = Group, shape = 
   )
 PCA_batch_corrected
 ggsave(file.path(Outdirectory,"Supplementary_Figure_4a.pdf"), PCA_batch_corrected, width = 5, height = 5)
+
+##############################################################################################################
+
+RiboTag_files <- list.files(
+  path = file.path(RiboTag_salmon_directory,"Data_Nolight"),
+  pattern = "quant.sf",
+  recursive = TRUE,
+  full.names = TRUE
+)
+
+RiboTag_sample_names <- basename(dirname(RiboTag_files))
+names(RiboTag_files) <- RiboTag_sample_names
+
+all(file.exists(RiboTag_files))
+
+length(RiboTag_files) #11
+
+make_metadata <- function(sample_names) {
+  parts <- do.call(rbind, strsplit(sample_names, "_", fixed = TRUE))
+  df <- data.frame(
+    sample     = sample_names,
+    Batch      = parts[,2],
+    AAV        = parts[,4],
+    Treatment  = parts[,5],
+    stringsAsFactors = FALSE
+  )
+  rownames(df) <- df$sample
+  return(df)
+}
+
+RiboTag_Metadata <- make_metadata(RiboTag_sample_names)
+
+RiboTag_Metadata <- RiboTag_Metadata %>%
+  mutate(
+    AAV = factor(AAV, levels = c("Control", "ChR2")),
+    Light = ifelse(Treatment == "NoOpto", "NoOpto", "Opto"),
+    Light = factor(Light, levels = c("NoOpto", "Opto")),
+    Batch = factor(Batch),
+    Group = factor(
+      paste(AAV, Light, sep = "_"),
+      levels = c(
+        "Control_NoOpto",
+        "ChR2_NoOpto",
+        "Control_Opto",
+        "ChR2_Opto"
+      )
+    )
+  )
+
+RiboTag_txi <- tximport(RiboTag_files, type = "salmon", tx2gene=mm10_Tx_final %>% dplyr::select(transcript_id,gene_name))
+
+RT_dds <- DESeqDataSetFromTximport(
+  txi     = RiboTag_txi,
+  colData = as.data.frame(RiboTag_Metadata),
+  design  = ~ Group
+)
+
+RT_dds <- DESeq(RT_dds, fitType = "local")
+
+RT_vst <- vst(RT_dds, blind = FALSE)
+
+RT_vst_mat <- assay(RT_vst)
+
+sample_cor <- cor(RT_vst_mat, method = "pearson")
+
+annotation_col <- as.data.frame(colData(RT_vst)) %>%
+  dplyr::select(AAV, Light)
+
+annotation_col <- annotation_col[colnames(sample_cor), , drop = FALSE]
+
+sampleDists <- dist(t(assay(RT_vst)))
+sampleDistMatrix <- as.matrix(sampleDists)
+
+colnames(sampleDistMatrix) <- sub("_salmon$", "", colnames(sampleDistMatrix))
+rownames(sampleDistMatrix) <- sub("_salmon$", "", rownames(sampleDistMatrix))
+
+ann_colors <- list(
+  Light = c(
+    "NoOpto" = "#377EB8",         # blue
+    "Opto"   = "#FF7F00"          # orange
+  ),
+  AAV = c(
+    "Control" = "#4DAF4A",        # green
+    "ChR2"    = "#E41A1C"         # red
+  )
+)
+
+pdf(
+  file.path(Outdirectory, "Supplementary_Figure_4c.pdf"),
+  width = 9,
+  height = 8
+)
+pheatmap(
+  sampleDistMatrix,
+  annotation_col = annotation_col,
+  annotation_row = annotation_col,
+  annotation_colors = ann_colors,
+  color = rev(viridisLite::viridis(100)),
+  clustering_distance_rows = sampleDists,
+  clustering_distance_cols = sampleDists,
+  border_color = NA)
+dev.off()
+
+pheatmap(
+  sampleDistMatrix,
+  annotation_col = annotation_col,
+  annotation_row = annotation_col,
+  annotation_colors = ann_colors,
+  color = rev(viridisLite::viridis(100)),
+  clustering_distance_rows = sampleDists,
+  clustering_distance_cols = sampleDists,
+  border_color = NA)
+
+dist_mat <- as.matrix(
+  dist(t(assay(RT_vst)))
+)
+
+meta <- as.data.frame(colData(RT_vst))
+meta$Sample <- rownames(meta)
+
+chr2_opto_samples <- meta %>%
+  dplyr::filter(Group == "ChR2_Opto") %>%
+  dplyr::pull(Sample)
+
+distance_to_chr2_opto <- purrr::map_dfr(
+  meta$Sample,
+  function(sample_id) {
+    
+    sample_group <- meta %>%
+      dplyr::filter(Sample == sample_id) %>%
+      dplyr::pull(Group)
+    
+    reference_samples <- chr2_opto_samples
+    
+    if (sample_group == "ChR2_Opto") {
+      reference_samples <- setdiff(
+        reference_samples,
+        sample_id
+      )
+    }
+    
+    tibble(
+      Sample = sample_id,
+      Group = sample_group,
+      Mean_distance_to_ChR2_Opto = mean(
+        dist_mat[sample_id, reference_samples]
+      )
+    )
+  }
+) %>%
+  dplyr::mutate(
+    Group = factor(
+      Group,
+      levels = c(
+        "ChR2_Opto",
+        "Control_Opto",
+        "ChR2_NoOpto"
+      ),
+      labels = c(
+        "ChR2 + Light",
+        "Control + Light",
+        "ChR2 No Light"
+      )
+    )
+  )
+
+distance_summary <- distance_to_chr2_opto %>%
+  dplyr::group_by(Group) %>%
+  dplyr::summarise(
+    n = dplyr::n(),
+    Mean = mean(Mean_distance_to_ChR2_Opto),
+    SD = sd(Mean_distance_to_ChR2_Opto),
+    SEM = SD / sqrt(n),
+    Median = median(Mean_distance_to_ChR2_Opto),
+    .groups = "drop"
+  )
+
+t_control_vs_noopto <- t.test(
+  Mean_distance_to_ChR2_Opto ~ Group,
+  data = dplyr::filter(
+    distance_to_chr2_opto,
+    Group %in% c(
+      "Control + Light",
+      "ChR2 No Light"
+    )
+  )
+)
+
+t_control_vs_opto <- t.test(
+  Mean_distance_to_ChR2_Opto ~ Group,
+  data = dplyr::filter(
+    distance_to_chr2_opto,
+    Group %in% c(
+      "Control + Light",
+      "ChR2 + Light"
+    )
+  )
+)
+
+t_noopto_vs_opto <- t.test(
+  Mean_distance_to_ChR2_Opto ~ Group,
+  data = dplyr::filter(
+    distance_to_chr2_opto,
+    Group %in% c(
+      "ChR2 No Light",
+      "ChR2 + Light"
+    )
+  )
+)
+
+raw_p_values <- c(
+  Control_vs_NoOpto = t_control_vs_noopto$p.value,
+  Control_vs_Opto = t_control_vs_opto$p.value,
+  NoOpto_vs_Opto = t_noopto_vs_opto$p.value
+)
+
+adjusted_p_values <- p.adjust(
+  raw_p_values,
+  method = "bonferroni"
+)
+
+p_control_vs_noopto <- adjusted_p_values["Control_vs_NoOpto"]
+p_control_vs_opto   <- adjusted_p_values["Control_vs_Opto"]
+p_noopto_vs_opto    <- adjusted_p_values["NoOpto_vs_Opto"]
+
+format_p <- function(p) {
+  
+  if (is.na(p)) {
+    return("NA")
+  }
+  
+  if (p < 0.0001) {
+    return("P < 0.0001")
+  }
+  
+  if (p < 0.001) {
+    return("P < 0.001")
+  }
+  
+  if (p < 0.01) {
+    return(
+      paste0(
+        "P = ",
+        formatC(
+          p,
+          format = "f",
+          digits = 3
+        )
+      )
+    )
+  }
+  
+  return(
+    paste0(
+      "P = ",
+      formatC(
+        p,
+        format = "f",
+        digits = 2
+      )
+    )
+  )
+}
+
+y_max <- max(
+  distance_to_chr2_opto$Mean_distance_to_ChR2_Opto,
+  na.rm = TRUE
+)
+
+y_range <- diff(
+  range(
+    distance_to_chr2_opto$Mean_distance_to_ChR2_Opto,
+    na.rm = TRUE
+  )
+)
+
+bracket_step <- max(
+  y_range * 0.14,
+  0.25
+)
+
+y1 <- y_max + bracket_step
+y2 <- y_max + bracket_step * 2
+y3 <- y_max + bracket_step * 3
+
+tick_height <- bracket_step * 0.12
+
+p_distance <- ggplot(
+  distance_to_chr2_opto,
+  aes(
+    x = Group,
+    y = Mean_distance_to_ChR2_Opto
+  )
+) +
+  geom_boxplot(
+    width = 0.30,        # was 0.45
+    outlier.shape = NA
+  ) +
+  
+  geom_jitter(
+    width = 0.04,        # was 0.08
+    height = 0,
+    size = 3
+  ) +
+  
+  ## ChR2 + Light vs Control + Light
+  annotate(
+    "segment",
+    x = 1, xend = 2,
+    y = y1, yend = y1
+  ) +
+  annotate(
+    "segment",
+    x = 1, xend = 1,
+    y = y1, yend = y1 - tick_height
+  ) +
+  annotate(
+    "segment",
+    x = 2, xend = 2,
+    y = y1, yend = y1 - tick_height
+  ) +
+  annotate(
+    "text",
+    x = 1.5,
+    y = y1 + tick_height,
+    label = format_p(p_control_vs_opto),
+    size = 4
+  ) +
+  
+  ## ChR2 + Light vs ChR2 No Light
+  annotate(
+    "segment",
+    x = 1, xend = 3,
+    y = y2, yend = y2
+  ) +
+  annotate(
+    "segment",
+    x = 1, xend = 1,
+    y = y2, yend = y2 - tick_height
+  ) +
+  annotate(
+    "segment",
+    x = 3, xend = 3,
+    y = y2, yend = y2 - tick_height
+  ) +
+  annotate(
+    "text",
+    x = 2,
+    y = y2 + tick_height,
+    label = format_p(p_noopto_vs_opto),
+    size = 4
+  ) +
+  
+  ## Control + Light vs ChR2 No Light
+  annotate(
+    "segment",
+    x = 2, xend = 3,
+    y = y3, yend = y3
+  ) +
+  annotate(
+    "segment",
+    x = 2, xend = 2,
+    y = y3, yend = y3 - tick_height
+  ) +
+  annotate(
+    "segment",
+    x = 3, xend = 3,
+    y = y3, yend = y3 - tick_height
+  ) +
+  annotate(
+    "text",
+    x = 2.5,
+    y = y3 + tick_height,
+    label = format_p(p_control_vs_noopto),
+    size = 4
+  ) +
+  
+  labs(
+    x = NULL,
+    y = "Mean Euclidean distance to ChR2 + Light samples"
+  ) +
+  coord_cartesian(
+    ylim = c(
+      NA,
+      y3 + bracket_step * 0.5
+    ),
+    clip = "off"
+  ) +
+  theme_classic(base_size = 14) +
+  theme(
+    axis.text.x = element_text(
+      angle = 0,
+      hjust = 0.5
+    ),
+    plot.margin = margin(
+      t = 20,
+      r = 10,
+      b = 10,
+      l = 10
+    )
+  )
+
+print(p_distance)
+
+ggsave(
+  file.path(
+    Outdirectory,
+    "Supplementary_Figure_4d.pdf"
+  ),
+  p_distance,
+  width = 5.5,
+  height = 5.5
+)
 
 ##############################################################################################################
 RiboTag_files <- list.files(
@@ -1259,7 +1673,7 @@ RT_p_go_bubble <- ggplot(
     legend.text = element_text(size = 7)
   )
 RT_p_go_bubble
-ggsave(file.path(Outdirectory, "Supplementary_Figure_4h.pdf"),RT_p_go_bubble,width = 5.5, height = 5.5,  units = "in",  device = grDevices::cairo_pdf)
+ggsave(file.path(Outdirectory, "Figure_4h.pdf"),RT_p_go_bubble,width = 5.5, height = 5.5,  units = "in",  device = grDevices::cairo_pdf)
 
 ################################################################################################################################
 #label volcano plots
@@ -2886,6 +3300,61 @@ readr::write_excel_csv(
     Outdirectory,
     "Source_Data_Figure_4j.csv"
   )
+)
+
+#Source data for Supplementary Figure 4d
+RT_sample_distance_source_data <- distance_to_chr2_opto %>%
+  dplyr::mutate(
+    Sample = sub("_salmon$", "", Sample),
+    Group = as.character(Group)
+  ) %>%
+  dplyr::select(
+    Sample,
+    Group,
+    Mean_distance_to_ChR2_Opto
+  ) %>%
+  dplyr::arrange(
+    Group,
+    Sample
+  )
+
+write.csv(
+  RT_sample_distance_source_data,
+  file.path(
+    Outdirectory,
+    "Source_Data_Supplementary_Figure_4d.csv"
+  ),
+  row.names = FALSE
+)
+
+RT_sample_distance_pvalues <- tibble::tibble(
+  Comparison = c(
+    "Control + Light vs ChR2 No Light",
+    "Control + Light vs ChR2 + Light",
+    "ChR2 No Light vs ChR2 + Light"
+  ),
+  Group_1 = c(
+    "Control + Light",
+    "Control + Light",
+    "ChR2 No Light"
+  ),
+  Group_2 = c(
+    "ChR2 No Light",
+    "ChR2 + Light",
+    "ChR2 + Light"
+  ),
+  Test = "Two-sided unpaired t-test",
+  Raw_p_value = unname(raw_p_values),
+  Bonferroni_adjusted_p_value = unname(adjusted_p_values)
+)
+
+write.csv(
+  RT_sample_distance_pvalues,
+  file.path(
+    Outdirectory,
+    "Source_Data_Supplementary_Figure_4d_stats.csv"
+  ),
+  row.names = FALSE
 )
 
 #Source data for Supplementary_Fig_4e

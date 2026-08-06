@@ -1,0 +1,21 @@
+﻿"Comparison_category","Biological_category","GO_term","Gene_count","P_value","Negative_log10_p_value","Plotted_negative_log10_p_value"
+"30v5_Down_RT_Up","nuclear","chromatin remodeling",8,8.532241540314956e-6,5.068936858550654,5.068936858550654
+"30v5_Down_RT_Up","nuclear","epigenetic regulation of gene expression",4,0.001431335431117758,2.844258578111143,2.844258578111143
+"30v5_Down_RT_Up","nuclear","histone modification",2,0.047125736117062576,1.326741852932963,1.326741852932963
+"30v5_Down_RT_Up","nuclear","mRNA transcription",2,0.005432936033967659,2.2649654082109714,2.2649654082109714
+"30v5_Down_RT_Up","nuclear","protein localization to nucleus",3,0.033939154600087985,1.4692989798465548,1.4692989798465548
+"30v5_Up_RT_Down","synaptic","chemical synaptic transmission, postsynaptic",4,1.1887296139130045e-4,3.924916917912369,3.924916917912369
+"30v5_Up_RT_Down","synaptic","learning or memory",10,2.1586412707607845e-9,8.665819523980513,8.665819523980513
+"30v5_Up_RT_Down","synaptic","protein localization to postsynapse",2,0.009424149493665495,2.025757833363525,2.025757833363525
+"30v5_Up_RT_Down","synaptic","regulation of postsynaptic membrane potential",4,1.7838184782399094e-4,3.7486493416133118,3.7486493416133118
+"30v5_Up_RT_Down","synaptic","synapse assembly",10,4.4426330858238986e-11,10.35235955337675,10.35235955337675
+"30v5_Up_RT_Down","synaptic","vesicle-mediated transport in synapse",6,2.4985724754201405e-5,4.602308048575393,4.602308048575393
+"5v0_Down_RT_Up","synaptic","chemical synaptic transmission, postsynaptic",2,0.01202827689842393,1.919796582727043,1.919796582727043
+"5v0_Down_RT_Up","synaptic","learning or memory",3,0.011518104013405535,1.938619003923485,1.938619003923485
+"5v0_Down_RT_Up","synaptic","protein localization to postsynapse",2,0.004218442598568739,2.3748478560730626,2.3748478560730626
+"5v0_Down_RT_Up","synaptic","regulation of postsynaptic membrane potential",2,0.014691415754433309,1.8329363509278098,1.8329363509278098
+"5v0_Down_RT_Up","synaptic","synapse assembly",3,0.003847779542959259,2.414789818655801,2.414789818655801
+"5v0_Down_RT_Up","synaptic","vesicle-mediated transport in synapse",4,5.755544226167104e-4,3.2399136045717283,3.2399136045717283
+"5v0_Up_RT_Down","nuclear","RNA catabolic process",2,0.03121977129145656,1.505570282798976,1.505570282798976
+"5v0_Up_RT_Down","nuclear","histone modification",2,0.010241908424880243,1.9896191116052147,1.9896191116052147
+"5v0_Up_RT_Down","nuclear","mRNA transcription",1,0.04749712586909005,1.3233326694690202,1.3233326694690202

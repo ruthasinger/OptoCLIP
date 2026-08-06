@@ -1,0 +1,12 @@
+"Sample","Group","Mean_distance_to_ChR2_Opto"
+"RiboTag_Exp03_M16_ChR2_30min_IP","ChR2 + Light",19.1174145328345
+"RiboTag_Exp03_M17_ChR2_30min_IP","ChR2 + Light",18.3672845903649
+"RiboTag_Exp03_M18_ChR2_5min_IP","ChR2 + Light",17.2100113100248
+"RiboTag_Exp03_M19_ChR2_5min_IP","ChR2 + Light",17.0409176192231
+"RiboTag_Exp03_M2_ChR2_NoOpto_IP","ChR2 No Light",25.0129488328896
+"RiboTag_Exp03_M3_ChR2_NoOpto_IP","ChR2 No Light",24.7008643064598
+"RiboTag_Exp03_M4_ChR2_NoOpto_IP","ChR2 No Light",25.5687150190592
+"RiboTag_Exp03_M26_Control_30min_IP","Control + Light",23.6303885935697
+"RiboTag_Exp03_M27_Control_30min_IP","Control + Light",21.3850916928938
+"RiboTag_Exp03_M28_Control_5min_IP","Control + Light",21.1464373421904
+"RiboTag_Exp03_M29_Control_5min_IP","Control + Light",23.6682946205685

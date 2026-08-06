@@ -10,7 +10,7 @@ library(Rsamtools)
 library(GenomicFeatures)
 library(stringr)
 
-output_dir="~/ruthasinger_github/OptoCLIP_April2026/Figure4_FigureS4_RiboTag/Data/Data_RiboTag"
+output_dir="~/ruthasinger_github/OptoCLIP/Figure4_FigureS4_RiboTag/Data/Data_RiboTag"
 setwd(output_dir)
 
 myMiniconda <- file.path(output_dir,"RAS_BRC_conda")
