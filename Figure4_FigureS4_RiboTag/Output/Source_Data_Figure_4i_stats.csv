@@ -1,0 +1,3 @@
+﻿"Comparison","Group_1","Group_2","Group_1_n","Group_2_n","Wilcoxon_statistic","P_value","Significance"
+"5v0","Down","Up",447,623,122340,6.99e-4,"***"
+"30v5","Down","Up",699,609,251428,1.5e-8,"****"

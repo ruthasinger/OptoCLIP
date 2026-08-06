@@ -1,0 +1,25 @@
+"Sample","Condition","FMRP CLIP transcriptome tags"
+"RAS100_FMRP_CLIP_ChR2_30min","ChR2_30min",41721
+"RAS80_FMRP_CLIP_ChR2_30min","ChR2_30min",20456
+"RAS90_FMRP_CLIP_ChR2_30min","ChR2_30min",29396
+"RAS98_FMRP_CLIP_ChR2_30min","ChR2_30min",121972
+"RAS120_FMRP_CLIP_ChR2_5min","ChR2_5min",256727
+"RAS128_FMRP_CLIP_ChR2_5min","ChR2_5min",98257
+"RAS132_FMRP_CLIP_ChR2_5min","ChR2_5min",194181
+"RAS133_FMRP_CLIP_ChR2_5min","ChR2_5min",84614
+"RAS101_FMRP_CLIP_Control_Control","Control_Control",135474
+"RAS102_FMRP_CLIP_Control_Control","Control_Control",181115
+"RAS81_FMRP_CLIP_Control_Control","Control_Control",81588
+"RAS91_FMRP_CLIP_Control_Control","Control_Control",192471
+"RAS78_FMRP_CLIP_noCre_noCre","noCre_noCre",857
+"RAS88_FMRP_CLIP_noCre_noCre","noCre_noCre",5
+"RAS93_FMRP_CLIP_noCre_noCre","noCre_noCre",4846
+
+Pairwise t-test statistics
+"group1","group2","n1","n2","p","p.signif"
+"noCre_noCre","ChR2_5min",3,4,0.00364,"**"
+"noCre_noCre","Control_Control",3,4,0.00568,"**"
+"ChR2_5min","ChR2_30min",4,4,0.022,"*"
+"Control_Control","ChR2_30min",4,4,0.0357,"*"
+"noCre_noCre","ChR2_30min",3,4,0.252,"ns"
+"Control_Control","ChR2_5min",4,4,0.789,"ns"
