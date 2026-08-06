@@ -101,6 +101,8 @@ This study implements a multi-modal analysis pipeline integrating FMRP CLIP and 
 
 - **Source Data for Figure 3g**
 
+- **Source Data for Supplementary Figure 3a**
+
 ### Figure 4 and Figure S4 — Opto RiboTag
 
 #### **Script:**

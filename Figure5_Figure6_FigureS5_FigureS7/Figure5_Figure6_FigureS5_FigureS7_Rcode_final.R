@@ -5063,6 +5063,36 @@ readr::write_excel_csv(
 )
 
 #Source data for Supplementary Fig. 5e
+CLIP_temporal_gene_source_data <- CLIP_pathway_temporal_df %>%
+  dplyr::transmute(
+    pathway = as.character(pathway),
+    gene_name,
+    CLIP_log2FC_5v0,
+    CLIP_pvalue_5v0,
+    CLIP_log2FC_30v5,
+    CLIP_pvalue_30v5,
+    significant_reversal,
+    temporal_category = as.character(temporal_category),
+    fill_group = as.character(fill_group)
+  ) %>%
+  dplyr::arrange(
+    factor(pathway, levels = pathway_order),
+    factor(fill_group, levels = fill_group_order),
+    gene_name
+  )
+
+write.csv(
+  CLIP_temporal_gene_source_data,
+  file.path(
+    Outdirectory,
+    "Source_Data_Supplementary_Figure_5e.csv"
+  ),
+  row.names = FALSE
+)
+
+
+
+#Source data for Supplementary Fig. 5f
 Hale_target_CLIPscore_data <- Hale_targets %>%
   dplyr::select(
     gene_name,

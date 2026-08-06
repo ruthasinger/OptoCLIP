@@ -534,3 +534,67 @@ write.csv(
   row.names = FALSE
 )
 
+#Source data for Supplementary Figure 3a
+sample_info <- data.frame(
+  sample_index = seq_len(ncol(CLIP_count_matrix)),
+  sample_name = colnames(CLIP_count_matrix),
+  sample_label = colnames(CLIP_count_matrix_short),
+  stringsAsFactors = FALSE
+)
+
+sample_pairs <- expand.grid(
+  Sample_1_index = seq_len(ncol(corr_matrix)),
+  Sample_2_index = seq_len(ncol(corr_matrix))
+) %>%
+  dplyr::filter(Sample_1_index < Sample_2_index)
+
+corr_source_data <- sample_pairs %>%
+  dplyr::mutate(
+    Sample_1 = sample_info$sample_name[Sample_1_index],
+    Sample_1_label = sample_info$sample_label[Sample_1_index],
+    Sample_2 = sample_info$sample_name[Sample_2_index],
+    Sample_2_label = sample_info$sample_label[Sample_2_index],
+    
+    Pearson_r = mapply(
+      function(i, j) corr_matrix[i, j],
+      Sample_1_index,
+      Sample_2_index
+    ),
+    
+    p_value = mapply(
+      function(i, j) testRes$p[i, j],
+      Sample_1_index,
+      Sample_2_index
+    ),
+    
+    significance = dplyr::case_when(
+      p_value < 0.001  ~ "***",
+      p_value < 0.01   ~ "**",
+      p_value < 0.05   ~ "*",
+      TRUE             ~ "NS"
+    )
+  ) %>%
+  dplyr::select(
+    Sample_1,
+    Sample_1_label,
+    Sample_2,
+    Sample_2_label,
+    Pearson_r,
+    p_value,
+    significance
+  )
+
+corr_source_data$p_value_display <- ifelse(
+  corr_source_data$p_value == 0,
+  "<2.2e-16",
+  signif(corr_source_data$p_value, 3)
+)
+
+write.csv(
+  corr_source_data,
+  file.path(
+    Outdirectory,
+    "Source_Data_Supplementary_Figure_3a.csv"
+  ),
+  row.names = FALSE
+)
