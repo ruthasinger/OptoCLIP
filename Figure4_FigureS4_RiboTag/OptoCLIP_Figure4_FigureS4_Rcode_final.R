@@ -249,7 +249,7 @@ RiboTag_Metadata <- RiboTag_Metadata %>%
     Batch     = factor(Batch),
     Fraction  = factor(Fraction,  levels = c("Input","IP")),
     Condition = factor(Condition, levels = c("Control","ChR2")),
-    Timepoint = factor(Timepoint, levels = c("5min","30min")),
+    Timepoint = factor(Timepoint, levels = c("5min","30min","Control")),
     Group     = factor(paste(Condition, Timepoint, sep = "_"))
   )
 

@@ -335,8 +335,8 @@ myplot_pearson <- df %>%
       label.sep = ",",
       size = 2.5            
     ),
-    xlab = paste0(Treatment, " RiboTag log2 TPM"),
-    ylab = paste0(Treatment, " ",Rep, " CLIP log2 TPM")
+    xlab = paste0(Treatment," ",Time, " RiboTag log2 TPM"),
+    ylab = paste0(Treatment, " ",Time," ",Rep, " CLIP log2 TPM")
   ) +
   xlim(0, 15) +
   ylim(0, 15) +
@@ -376,8 +376,8 @@ myplot_pearson <- df %>%
       label.sep = ",",
       size = 2.5            
     ),
-    xlab = paste0(Treatment, " RiboTag log2 TPM"),
-    ylab = paste0(Treatment, " ",Rep, " CLIP log2 TPM")
+    xlab = paste0(Treatment," ",Time, " RiboTag log2 TPM"),
+    ylab = paste0(Treatment, " ",Time," ",Rep, " CLIP log2 TPM")
   ) +
   xlim(0, 15) +
   ylim(0, 15) +
@@ -417,8 +417,8 @@ myplot_pearson <- df %>%
       label.sep = ",",
       size = 2.5            
     ),
-    xlab = paste0(Treatment, " RiboTag log2 TPM"),
-    ylab = paste0(Treatment, " ",Rep, " CLIP log2 TPM")
+    xlab = paste0(Treatment," ",Time, " RiboTag log2 TPM"),
+    ylab = paste0(Treatment, " ",Time," ",Rep, " CLIP log2 TPM")
   ) +
   xlim(0, 15) +
   ylim(0, 15) +
@@ -457,8 +457,8 @@ myplot_pearson <- df %>%
       label.sep = ",",
       size = 2.5            
     ),
-    xlab = paste0(Treatment, " RiboTag log2 TPM"),
-    ylab = paste0(Treatment, " ",Rep, " CLIP log2 TPM")
+    xlab = paste0(Treatment," ",Time, " RiboTag log2 TPM"),
+    ylab = paste0(Treatment, " ",Time," ",Rep, " CLIP log2 TPM")
   ) +
   xlim(0, 15) +
   ylim(0, 15) +
@@ -556,8 +556,8 @@ myplot_pearson <- df %>%
       label.sep = ",",
       size = 2.5            
     ),
-    xlab = paste0(Treatment, " RiboTag log2 TPM"),
-    ylab = paste0(Treatment, " ",Rep, " CLIP log2 TPM")
+    xlab = paste0(Treatment," ",Time, " RiboTag log2 TPM"),
+    ylab = paste0(Treatment, " ",Time," ",Rep, " CLIP log2 TPM")
   ) +
   xlim(0, 15) +
   ylim(0, 15) +
@@ -597,8 +597,8 @@ myplot_pearson <- df %>%
       label.sep = ",",
       size = 2.5            
     ),
-    xlab = paste0(Treatment, " RiboTag log2 TPM"),
-    ylab = paste0(Treatment, " ",Rep, " CLIP log2 TPM")
+    xlab = paste0(Treatment," ",Time, " RiboTag log2 TPM"),
+    ylab = paste0(Treatment, " ",Time," ",Rep, " CLIP log2 TPM")
   ) +
   xlim(0, 15) +
   ylim(0, 15) +
@@ -637,8 +637,8 @@ myplot_pearson <- df %>%
       label.sep = ",",
       size = 2.5            
     ),
-    xlab = paste0(Treatment, " RiboTag log2 TPM"),
-    ylab = paste0(Treatment, " ",Rep, " CLIP log2 TPM")
+    xlab = paste0(Treatment," ",Time, " RiboTag log2 TPM"),
+    ylab = paste0(Treatment, " ",Time," ",Rep, " CLIP log2 TPM")
   ) +
   xlim(0, 15) +
   ylim(0, 15) +
@@ -677,8 +677,8 @@ myplot_pearson <- df %>%
       label.sep = ",",
       size = 2.5            
     ),
-    xlab = paste0(Treatment, " RiboTag log2 TPM"),
-    ylab = paste0(Treatment, " ",Rep, " CLIP log2 TPM")
+    xlab = paste0(Treatment," ",Time, " RiboTag log2 TPM"),
+    ylab = paste0(Treatment, " ",Time," ",Rep, " CLIP log2 TPM")
   ) +
   xlim(0, 15) +
   ylim(0, 15) +
