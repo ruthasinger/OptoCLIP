@@ -97,9 +97,9 @@ This study implements a multi-modal analysis pipeline integrating FMRP CLIP and 
 
 - **Supplementary Figure 3a:** Heatmap of pairwise pearson correlation analysis of each sample compared to every other sample.
 
--- **Source Data for Figure 3d**
+- **Source Data for Figure 3d**
 
--- **Source Data for Figure 3g**
+- **Source Data for Figure 3g**
 
 ### Figure 4 and Figure S4 — Opto RiboTag
 
@@ -233,6 +233,34 @@ This study implements a multi-modal analysis pipeline integrating FMRP CLIP and 
 - **Supplementary Figures 7d, e:** Violin and box plots showing subcellular localization of transcripts differentially bound by FMRP in different conditions
 
 - **Supplementary Figure 7f:** Upset plot showing overlap of transcripts differentially bound by FMRP and differentially ribosome associated 
+
+- **Source Data for Figures 5b-h**
+
+- **Source Data for Figures 5i,j **
+
+- **Source Data for Figure 5k**
+
+- **Source Data for Figure 5l**
+
+- **Source Data for Figures 6a, b**
+
+- **Source Data for Figures 6c-f**
+
+- **Source Data for Supplementary Figure 5d**
+
+- **Source Data for Supplementary Figure 5f**
+
+- **Source Data for Supplementary Figures 7a, b**
+
+- **Source Data for Supplementary Figures 7a, b stats**
+
+- **Source Data for Supplementary Figure 7c**
+
+- **Source Data for Supplementary Figures 7d, e**
+
+- **Source Data for Supplementary Figures 7d, e stats**
+
+- **Source Data for Supplementary Figure 7f**
 
 
 ## **R_functions**
