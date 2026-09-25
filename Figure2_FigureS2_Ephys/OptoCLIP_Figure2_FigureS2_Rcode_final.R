@@ -622,7 +622,7 @@ FiveHz_FiveTrain_plot <- ggplot(
 FiveHz_FiveTrain_plot
 ggsave(filename = file.path(Outdirectory,"Figure_2f_scale_1s_10mV.png"), plot= FiveHz_FiveTrain_plot, device='png', dpi = 600, width=7, height=3.5)
 
-###########################
+#######################################################################################################################################
 # summary plot
 
 read_all_sweeps <- function(filename) {

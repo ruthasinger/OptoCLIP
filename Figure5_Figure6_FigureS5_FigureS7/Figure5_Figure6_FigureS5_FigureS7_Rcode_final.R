@@ -4613,7 +4613,7 @@ CLIPRT_p_go_bubble <- ggplot(
     name = "P.value",
     limits = c(1.3, 12),
     breaks = c(1.3, 2, 4, 6, 8,10,12),
-    labels = c("0.05","0.1", "1e-4", "1e-6", "1e-8","1e-10","≤1e-12"),
+    labels = c("0.05","0.01", "1e-4", "1e-6", "1e-8","1e-10","≤1e-12"),
     guide = guide_colorbar(barheight = grid::unit(4, "cm"))
   ) +
   theme_classic(base_size = 9) +
