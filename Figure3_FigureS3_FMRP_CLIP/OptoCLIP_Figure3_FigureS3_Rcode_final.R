@@ -497,21 +497,14 @@ write.table(
 )
 
 #Source Data for Fig. 3g
-Source_Data_Figure_3g <- region_ratios_all %>%
+Source_Data_Figure_3g_stats <- region_ratios_all %>%
   rstatix::group_by(region) %>%
   rstatix::wilcox_test(ratio ~ Condition, p.adjust.method = "BH") %>%
   rstatix::add_significance("p.adj") %>%
-  rstatix::add_y_position(fun = "max", step.increase = 0.08) %>%
+  dplyr::ungroup() %>%
   dplyr::select(
-    region,
-    group1,
-    group2,
-    n1,
-    n2,
-    statistic,
-    p,
-    p.adj,
-    p.adj.signif
+    region, group1, group2, n1, n2,
+    statistic, p, p.adj, p.adj.signif
   ) %>%
   dplyr::rename(
     Region = region,
@@ -525,13 +518,9 @@ Source_Data_Figure_3g <- region_ratios_all %>%
     `Adjusted significance` = p.adj.signif
   )
 
-write.csv(
-  Source_Data_Figure_3g,
-  file.path(
-    Outdirectory,
-    "Source_Data_Figure_3g.csv"
-  ),
-  row.names = FALSE
+readr::write_excel_csv(
+  Source_Data_Figure_3g_stats,
+  file.path(Outdirectory, "Source_Data_Figure_3g.csv")
 )
 
 #Source data for Supplementary Figure 3a
